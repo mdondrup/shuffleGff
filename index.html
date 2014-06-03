@@ -38,8 +38,8 @@
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p><code>shuffleRanges.pl -chromsizes chromsizes.txt -excludes xclude.gff3 -out shuffled.gff3  -minlength 1000</code>
-   <code>-progress -verbose input.gff3</code></p>
+<p><code>shuffleRanges.pl -chromsizes chromsizes.txt -excludes xclude.gff3 -out shuffled.gff3  -minlength 1000 
+   -progress -verbose input.gff3</code></p>
 
 <h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -47,6 +47,21 @@
 <ul>
 <li>Set::IntervalTree</li>
 <li>BioPerl</li>
+</ul><h2>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<ul>
+<li>-chromsizes file.txt: a tab separated file with two columns: chromosome of landmark name, length. This file will be used to draw regions.</li>
+<li>-excludes file.gff3: a .gff3 formatted file with regions to avoid when placing features (optional)</li>
+<li>-out shuffled.gff3: output file (default shuffled.gff3)</li>
+<li>-minlength: minimal length of chromosome or landmark to draw from (default: 1000) to avoid redraws</li>
+<li>-progress: display a progress counter</li>
+<li>-verbose: more annoying output</li>
+</ul><h2>
+<a name="bugs" class="anchor" href="#bugs"><span class="octicon octicon-link"></span></a>Bugs</h2>
+
+<ul>
+<li>Many</li>
 </ul>
       </section>
       <footer>
