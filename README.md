@@ -10,7 +10,7 @@ Usage
    -progress -verbose input.gff3
 
 Dependencies
-
+------------------------------------------
    use Set::IntervalTree;
    use Bio::Tools::GFF;
    use Bio::SeqFeatureI;
