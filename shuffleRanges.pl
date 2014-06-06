@@ -26,7 +26,8 @@ my @order = (); ## maintain the feature order of the original file
 
 
 my $max_iter = 10000; ## maximum number of re-draws per feature
-
+my $seed = srand();
+print ("rand seed: $seed\n") if ($verbose);
 print ("parsing chromosomes\n") if ($verbose);
 my %chrom_sizes = parse_chroms($chromf); ## chrom sizes file
 print ("read ". ( scalar (keys %chrom_sizes)). " chromosomes\n") if ($verbose);
@@ -187,12 +188,12 @@ sub random_location_no_overlap_sparse {
 	if $verbose;
     }
     #### try max M*length times to place the start without overlap on this chromosome before drawing a new one
-    for (my $d = 0; $d < 2*$chrom_sizes{$seq_id}; $d++ ) {
+    for (my $d = 0; $d < 100; $d++ ) {
       
       $start = int (rand ($chrom_sizes{$seq_id} - $f->length - 1)) + 1;
       if (defined $excludes) {
 	last REPEAT if ( $excludes->countOverlaps($seq_id, $start, $start+$f->length) == 0 );
-	print "need to redraw, because position overlaps exclude region\n" if $verbose;
+	print "need to redraw ".$f->primary_id." (re-try $d-$c), because position $seq_id:$start overlaps exclude region\n" if $verbose;
       }    
     }
   }
@@ -226,20 +227,25 @@ sub weight_to_interval{
   my $tree = new Set::IntervalTree;
   my $max = 0;
   while (my ($k, $v) = each %weights) {
-    $tree->insert($k, $max+1, $max+$v+1);
-    $max += $v+1;
+	my $start = $max + 1;
+	my $end = $max + $v;
+    $tree->insert($k, $max, $max+$v);
+    $max += $v - 1;
   }
   return ($tree, $max);
 }
 
 sub weighted_rand_interval {
   my ($tree, $max) = @_;
-  my $pos = 1 + (int rand $max-1);
-   
-  return shift @{$tree->fetch($pos, $pos+1)};
+  while (1) {
+    my $pos = 1 + int (rand ($max-1));
+    my $res = shift @{$tree->fetch($pos, $pos+1)}; 
+    warn ("invalid interval drawn $pos (max: $max)") unless $res;	
+  return $res if $res;
+  }
 }
 
-
+__END__
 
 ######################################################################
 ### From Perl Cookbook, Chapter 2.10. Generating Biased Random Numbers
